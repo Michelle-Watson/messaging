@@ -1,0 +1,4 @@
+1. Building a Chat App - Intro to WebSockets  
+https://www.youtube.com/watch?v=J8xReLuBNPY
+
+Use Node + ws (websocket) to get started
