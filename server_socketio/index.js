@@ -1,5 +1,6 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
+import "dotenv/config";
 
 const httpServer = createServer();
 
@@ -23,5 +24,5 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(process.env.PORT, () =>
-  console.log(`listening on port ${PORT}`)
+  console.log(`listening on port ${process.env.PORT}`)
 );

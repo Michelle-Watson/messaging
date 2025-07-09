@@ -33,7 +33,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Chat />} />
-            <Route path="SocketioChat" element={<SocketioChat />} />
+            <Route path="socketio" element={<SocketioChat />} />
             {/* <Route path="games" element={<Games />} />
             <Route path="games/:id" element={<GameDetailsWithPrices />} />
             <Route path="games/add" element={<GameAdd />} />

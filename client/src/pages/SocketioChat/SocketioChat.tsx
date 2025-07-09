@@ -1,32 +1,53 @@
 import { useState, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client"; // Import Socket.IO client
 import "../Chat/Chat.scss";
 
-const VITE_API_WS = import.meta.env.VITE_API_WS || "ws://localhost:3000";
+const VITE_API_SOCKET =
+  import.meta.env.VITE_API_SOCKET || "ws://localhost:3000";
 
 export default function SocketioChat() {
   // State for messages and input
   const [messages, setMessages] = useState<string[]>([]); // Stores chat messages
   const [inputValue, setInputValue] = useState(""); // Stores input field text
 
-  // socket would reset to undefined on every re-render w/o useRef
-  const socketRef = useRef<WebSocket | null>(null); // Holds WebSocket instance
+  // Change type from WebSocket to Socket (from socket.io-client)
+  const socketRef = useRef<Socket | null>(null); // Holds Socket.io instance
   const messagesEndRef = useRef<HTMLDivElement>(null); // Reference to auto-scroll to bottom
 
   useEffect(() => {
-    // 1. Create WebSocket connection
-    socketRef.current = new WebSocket(VITE_API_WS);
+    // Initialize Socket.IO connection
+    socketRef.current = io(VITE_API_SOCKET, {
+      transports: ["websocket"], // Force WebSocket transport only
+      autoConnect: true, // Automatically connect (default)
+      reconnection: true, // Automatically reconnect (default)
+    });
 
-    // 2. Set up event listeners
-    socketRef.current.onopen = () => console.log("Connected");
-    socketRef.current.onmessage = (event) => {
-      setMessages((prev) => [...prev, event.data]); // Add new message to list
-    };
-    socketRef.current.onerror = (error) => console.error("Error:", error);
-    socketRef.current.onclose = () => console.log("Disconnected");
+    // Set up event listeners
+    socketRef.current.on("connect", () => {
+      console.log("Connected to Socket.IO server");
+    });
 
-    // 3. Cleanup: Close connection when component unmounts
+    // Listen for 'message' events from server
+    socketRef.current.on("message", (message: string) => {
+      setMessages((prev) => [...prev, message]);
+    });
+
+    socketRef.current.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    socketRef.current.on("connect_error", (err) => {
+      console.error("Connection error:", err);
+    });
+
+    // Cleanup function
     return () => {
-      if (socketRef.current) socketRef.current.close();
+      if (socketRef.current) {
+        socketRef.current.off("connect");
+        socketRef.current.off("message");
+        socketRef.current.off("disconnect");
+        socketRef.current.disconnect();
+      }
     };
   }, []);
 
@@ -37,9 +58,10 @@ export default function SocketioChat() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // if input has text & WebSocket is open
-    if (inputValue.trim() && socketRef.current?.readyState === WebSocket.OPEN) {
-      socketRef.current.send(inputValue); // send
+    // if input has text & Socket is connected
+    if (inputValue.trim() && socketRef.current?.connected) {
+      // readyState -> connected
+      socketRef.current.emit("message", inputValue); // send -> emit
       setInputValue(""); // clear input
     }
   };
