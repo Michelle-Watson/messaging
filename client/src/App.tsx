@@ -2,21 +2,38 @@
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 import "./App.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import Chat from "./pages/Chat/Chat";
+import SocketioChat from "./pages/SocketioChat/SocketioChat";
 
 function App() {
   // const [count, setCount] = useState(0);
 
   return (
     <BrowserRouter>
-      {/* <h1>Header placeholder</h1> */}
       <div className="app-container">
         {/* <Header /> */}
+        <header className="app-header">
+          <nav>
+            <ul className="nav-links">
+              <li>
+                <Link to="/" className="nav-link">
+                  WebSocket Chat
+                </Link>
+              </li>
+              <li>
+                <Link to="/socketio" className="nav-link">
+                  Socket.IO Chat
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </header>
         <main>
           <Routes>
             <Route path="/" element={<Chat />} />
+            <Route path="SocketioChat" element={<SocketioChat />} />
             {/* <Route path="games" element={<Games />} />
             <Route path="games/:id" element={<GameDetailsWithPrices />} />
             <Route path="games/add" element={<GameAdd />} />
