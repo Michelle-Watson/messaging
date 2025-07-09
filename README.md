@@ -13,16 +13,23 @@ This repo will have multiple servers to practice using sockets with an Express S
 2. In the terminal, navigate to the [client](./client/) folder, type `npm i` and `npm run dev`
 3. There is a header where you can select the server you want to test out
 
-## If running Express ws:
+## If running WebSocket:
 
 This follows along this video loosely: https://www.youtube.com/watch?v=J8xReLuBNPY
 
 1. In the terminal, navigate to the [server_ws](./server_node_ws/) folder, type `npm i` and `npm run dev`.
 2. On the client, click on `WebSocket Chat`
 
-## If running Express Socket.io:
+## If running Socket.io:
 
 This follows along this video loosely: https://www.youtube.com/watch?v=SGQM7PU9hzI
 
 1. In the terminal, navigate to the [server_socketio](./server_socketio/) folder, type `npm i` and `npm run dev`
+2. On the client side, click on `Socket.IO Chat`
+
+## If running Express Socket.io:
+
+This follows along this video loosely: https://www.youtube.com/watch?v=SGQM7PU9hzI
+
+1. In the terminal, navigate to the [server_express_socketio](./server_express_socketio/) folder, type `npm i` and `npm run dev`
 2. On the client side, click on `Socket.IO Chat`
